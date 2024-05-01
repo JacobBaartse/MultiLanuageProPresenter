@@ -43,6 +43,17 @@ class simpleapp_tk(tkinter.Tk):
         self.labelTitle.pack()
         self.labelTitle.place(x=5, y=5)
 
+        self.entryLineCount = tkinter.StringVar()
+
+        self.entry2 = tkinter.Entry(self, textvariable=self.entryLineCount, bg="#e0e0e0")
+        self.entry2.config(width=6)
+        self.entry2.place(x=155, y=60)
+        self.entryLineCount.set("2")
+
+        self.labelTitleCount = tkinter.Label(self, text="Number of lines per slide:")
+        self.labelTitleCount.pack()
+        self.labelTitleCount.place(x=5, y=60)
+
         self.ScrollBar = tkinter.Scrollbar(self)
         self.ScrollBar.config(command=self.multiple_view)
         self.ScrollBar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
@@ -95,7 +106,13 @@ class simpleapp_tk(tkinter.Tk):
         try:
             title = title.rstrip()
             output_filename = os.path.join(self.output_dir, title)
-            save_song(text_block_names, song_texts, output_filename)
+            try:
+                max_line_count = int(self.entryLineCount.get())
+            except:
+                self.entryLineCount.set("2")
+                max_line_count = 2
+
+            save_song(text_block_names, song_texts, max_line_count, output_filename)
 
             self.entryMessage.delete('1.0', tkinter.END)
             self.entryMessage.insert(tkinter.END, 'import in Pro presenter: "file", "import", "import file", ' + output_filename)

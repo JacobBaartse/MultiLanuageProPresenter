@@ -51,35 +51,41 @@ def get_text_block_names():
     return names
 
 
-def split_slides(text_block_names, song_texts):
+def split_slides(text_block_names, song_texts, max_line_count):
     slides = []
     slide = {"label": "Verse 1"}
     with open("GroupNames.txt", "r") as group_names:
         labels = group_names.read().split("\n")
     line_index = 0
+    lines_in_slide = 0
     while True:
         to_next_line = False
-        for text_block_name in text_block_names:
+        for index, text_block_name in enumerate(text_block_names):
             if line_index >= len(song_texts[text_block_name]):
                 return slides
             if not to_next_line:
-                if song_texts[text_block_name][line_index].strip() == "":
-                    slides.append(slide)
+                if (song_texts[text_block_name][line_index].strip() == "") or (lines_in_slide == max_line_count):
+                    if slide:
+                        slides.append(slide)
                     slide = {}
+                    lines_in_slide = 0
+                if song_texts[text_block_name][line_index].strip() == "":
                     to_next_line = True
             if not to_next_line:
                 if song_texts[text_block_name][line_index] in labels:
                     to_next_line = True
                     slide["label"] = song_texts[text_block_name][line_index]
-                if not to_next_line:
-                    if text_block_name in slide:
-                        slide[text_block_name] += "\\par " + encode_for_rtf(song_texts[text_block_name][line_index])
-                    else:
-                        slide[text_block_name] = encode_for_rtf(song_texts[text_block_name][line_index])
+            if not to_next_line:
+                if text_block_name in slide:
+                    slide[text_block_name] += "\\par " + encode_for_rtf(song_texts[text_block_name][line_index])
+                else:
+                    slide[text_block_name] = encode_for_rtf(song_texts[text_block_name][line_index])
+                if index == len(text_block_names) - 1:
+                    lines_in_slide += 1
         line_index += 1
 
 
-def save_song(text_block_names, song_texts, output_filename):
+def save_song(text_block_names, song_texts, line_count, output_filename):
     #  store also as pickle file.
     with open(output_filename + '.pkl', 'wb+') as f:
         pickle.dump(song_texts, f)
@@ -105,7 +111,7 @@ def save_song(text_block_names, song_texts, output_filename):
     presentation_obj.cue_groups[-1].group.application_group_identifier.string = make_uuid()
 
     slide_label = None
-    song_texts = split_slides(text_block_names, song_texts)
+    song_texts = split_slides(text_block_names, song_texts, line_count)
     for slide_text in song_texts:
         slide_uuid = make_uuid()
         if "label" in slide_text:
@@ -129,8 +135,8 @@ def save_song(text_block_names, song_texts, output_filename):
                 element.element.uuid.string = make_uuid()
                 element.element.text.rtf_data = empty_rtf
 
-    add_slide(presentation_obj, cue_group_names, slide_label="Interlude 1")
-    add_slide(presentation_obj, cue_group_names, slide_label="End")
+    add_slide(presentation_obj, cue_group_names, slide_label="Interlude")
+    add_slide(presentation_obj, cue_group_names, slide_label="Ending")
 
     with open(output_filename + ".pro", "wb") as pro_file:
         pro_file.write(presentation_obj.SerializeToString())
