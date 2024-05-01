@@ -80,7 +80,7 @@ def split_slides(text_block_names, song_texts):
 
 
 def save_song(text_block_names, song_texts, output_filename):
-    # todo store also as txt file.
+    #  store also as pickle file.
     with open(output_filename + '.pkl', 'wb+') as f:
         pickle.dump(song_texts, f)
 

@@ -7,6 +7,19 @@ from SongEditorPro7Generic import save_song, get_text_block_names
 import pickle
 
 
+def get_download_path():
+    """Returns the default downloads path for linux or windows"""
+    if os.name == 'nt':
+        import winreg
+        sub_key = r'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders'
+        downloads_guid = '{374DE290-123F-4565-9164-39C4925E467B}'
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, sub_key) as key:
+            location = winreg.QueryValueEx(key, downloads_guid)[0]
+        return location
+    else:
+        return os.path.join(os.path.expanduser('~'), 'downloads')
+
+
 class simpleapp_tk(tkinter.Tk):
     def __init__(self, parent, output_dir="", text_block_names=None):
         self.output_dir = output_dir
@@ -95,7 +108,7 @@ if __name__ == "__main__":
     text_block_names = get_text_block_names()
     num_languages = len(text_block_names)
 
-    output_dir = r"C:\Users\fam_b\Downloads"
+    output_dir = get_download_path()
 
     app = simpleapp_tk(None, output_dir=output_dir, text_block_names=text_block_names)
 
