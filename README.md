@@ -18,8 +18,8 @@ To change the Text Object names in the generated presentation:
 - put them in the correct order in the Object list
 - export the Presentation to this directory (replacing the current Template.pro file)
 
-start the Multi language editor:
-- cd MultiLanguageProPresenter
-- python3 Main.py
+start the Multi language editor example:
+- cd \MultiLanguageProPresenter
+- c:\python11\python3 Main.py
 
 
