@@ -34,25 +34,22 @@ class simpleapp_tk(tkinter.Tk):
             songEntry.yview(*args)
 
     def initialize(self):
+        self.labelTitle = tkinter.Label(self, text="Song name:")
+        self.labelTitle.pack()
+        self.labelTitle.place(x=5, y=20)
         self.entryTitle = tkinter.StringVar()
         self.entry1 = tkinter.Entry(self, textvariable=self.entryTitle, bg='#e0e0e0')
         self.entry1.config(width=57)
-        self.entry1.place(x=5, y=30)
-
-        self.labelTitle = tkinter.Label(self, text="Title")
-        self.labelTitle.pack()
-        self.labelTitle.place(x=5, y=5)
-
-        self.entryLineCount = tkinter.StringVar()
-
-        self.entry2 = tkinter.Entry(self, textvariable=self.entryLineCount, bg="#e0e0e0")
-        self.entry2.config(width=6)
-        self.entry2.place(x=155, y=60)
-        self.entryLineCount.set("2")
+        self.entry1.place(x=75, y=20)
 
         self.labelTitleCount = tkinter.Label(self, text="Number of lines per slide:")
         self.labelTitleCount.pack()
         self.labelTitleCount.place(x=5, y=60)
+        self.entryLineCount = tkinter.StringVar()
+        self.entry2 = tkinter.Entry(self, textvariable=self.entryLineCount, bg="#e0e0e0")
+        self.entry2.config(width=6)
+        self.entry2.place(x=155, y=60)
+        self.entryLineCount.set("2")
 
         self.ScrollBar = tkinter.Scrollbar(self)
         self.ScrollBar.config(command=self.multiple_view)
@@ -61,12 +58,12 @@ class simpleapp_tk(tkinter.Tk):
         for index, text_block_name in enumerate(text_block_names):
             self.labelSongText = tkinter.Label(self, text=text_block_name)
             self.labelSongText.pack()
-            self.labelSongText.place(x=5+index*620, y=125)
-            entrySongText = tkinter.Text(width=75, height=37)
+            self.labelSongText.place(x=5+index*520, y=100)
+            entrySongText = tkinter.Text(width=64, height=42)
             entrySongText.config(yscrollcommand=self.ScrollBar.set, bg='#e0e0e0')
             entrySongText.config(bg='#e0e0e0')
             entrySongText.pack()
-            entrySongText.place(x=5+index*620, y=150)
+            entrySongText.place(x=5+index*520, y=125)
             self.songEntries.append(entrySongText)
 
         self.labelHint = tkinter.Label(self, text="For available group names see GroupNames.txt")
@@ -129,7 +126,7 @@ if __name__ == "__main__":
 
     app = simpleapp_tk(None, output_dir=output_dir, text_block_names=text_block_names)
 
-    gui_with = 640*num_languages
+    gui_with = 540*num_languages
     app.geometry(str(gui_with) + "x930+0+0")
     app.title('Song editor for ProPresenter7')
 
