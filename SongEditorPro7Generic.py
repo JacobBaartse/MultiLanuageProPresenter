@@ -106,6 +106,7 @@ def save_song(text_block_names, song_texts, line_count, output_filename):
     presentation_obj.cues[0].actions[0].slide.presentation.base_slide.elements[0].element.text.rtf_data = empty_rtf
     presentation_obj.cues[0].actions[0].slide.presentation.base_slide.elements[1].element.text.rtf_data = empty_rtf
     # update reference to intro slide
+    presentation_obj.cue_groups[0].group.name = "Intro"
     presentation_obj.cue_groups[0].cue_identifiers[0].string = intro_uuid
     presentation_obj.cues[0].uuid.string = intro_uuid
     presentation_obj.cue_groups[-1].group.application_group_identifier.string = make_uuid()
