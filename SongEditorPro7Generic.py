@@ -42,7 +42,7 @@ def encode_for_rtf(some_string):
 
 def get_text_block_names():
     names = []
-    sample_file = r".\Template.pro"
+    sample_file = r"Template.pro"
     presentation_obj = presentation_pb2.Presentation()
     file1 = open(sample_file, mode='rb')
     presentation_obj.ParseFromString(file1.read())
@@ -94,7 +94,7 @@ def save_song(text_block_names, song_texts, line_count, output_filename):
     cue_group_names = {"Intro": 0,
                        }
 
-    sample_file = r".\Template.pro"
+    sample_file = r"Template.pro"
     presentation_obj = presentation_pb2.Presentation()
     file1 = open(sample_file, mode='rb')
     presentation_obj.ParseFromString(file1.read())

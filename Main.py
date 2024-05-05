@@ -17,7 +17,7 @@ def get_download_path():
             location = winreg.QueryValueEx(key, downloads_guid)[0]
         return location
     else:
-        return os.path.join(os.path.expanduser('~'), 'downloads')
+        return os.path.join(os.path.expanduser('~'), 'Downloads')
 
 
 class simpleapp_tk(tkinter.Tk):
@@ -40,7 +40,7 @@ class simpleapp_tk(tkinter.Tk):
         self.entryTitle = tkinter.StringVar()
         self.entry1 = tkinter.Entry(self, textvariable=self.entryTitle, bg='#e0e0e0')
         self.entry1.config(width=57)
-        self.entry1.place(x=75, y=20)
+        self.entry1.place(x=95, y=20)
 
         self.labelTitleCount = tkinter.Label(self, text="Number of lines per slide:")
         self.labelTitleCount.pack()
@@ -48,7 +48,7 @@ class simpleapp_tk(tkinter.Tk):
         self.entryLineCount = tkinter.StringVar()
         self.entry2 = tkinter.Entry(self, textvariable=self.entryLineCount, bg="#e0e0e0")
         self.entry2.config(width=6)
-        self.entry2.place(x=155, y=60)
+        self.entry2.place(x=175, y=60)
         self.entryLineCount.set("2")
 
         self.ScrollBar = tkinter.Scrollbar(self)
@@ -59,7 +59,7 @@ class simpleapp_tk(tkinter.Tk):
             self.labelSongText = tkinter.Label(self, text=text_block_name)
             self.labelSongText.pack()
             self.labelSongText.place(x=5+index*520, y=100)
-            entrySongText = tkinter.Text(width=64, height=42)
+            entrySongText = tkinter.Text(width=64, height=38)
             entrySongText.config(yscrollcommand=self.ScrollBar.set, bg='#e0e0e0')
             entrySongText.config(bg='#e0e0e0')
             entrySongText.pack()
@@ -85,8 +85,13 @@ class simpleapp_tk(tkinter.Tk):
 
         with open(file_path_string, 'rb') as f:
             loaded_dict = pickle.load(f)
+
+        for index, text_block_name in enumerate(self.text_block_names):
+            self.songEntries[index].delete(1.0, tkinter.END)  # required for linux
+
         for index, text_block_name in enumerate(self.text_block_names):
             self.songEntries[index].insert(tkinter.END, "\n".join(loaded_dict[text_block_name]))
+
         file_path_string.replace("\\", "/")
         self.entryTitle.set(file_path_string.replace(".pkl", "").split("/")[-1])
 

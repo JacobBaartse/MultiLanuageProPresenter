@@ -1,4 +1,4 @@
-# MultiLanuagePoPresenter
+# MultiLanuageProPresenter
 python script to generate a file that can be imported in propresenter 7 with multiple languages or tranlation(s)
 
 introduction video: 
@@ -40,3 +40,9 @@ In this program you can
 - add group names like Verse 1, Chorus, etc
 - put the translation next to the song text
 - click save to store it in the Download directory ( now you can import it into propresenter )
+
+Additional commands required on Linux mint:
+ModuleNotFoundError: No module named 'tkinter'
+- sudo apt update -y && sudo apt install -y python3.10-tk
+- sudo apt install python3-pip
+- pip install --upgrade protobuf
