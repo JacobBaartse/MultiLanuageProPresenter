@@ -66,18 +66,25 @@ class simpleapp_tk(tkinter.Tk):
             entrySongText.place(x=5+index*520, y=125)
             self.songEntries.append(entrySongText)
 
-        self.labelHint = tkinter.Label(self, text="For available group names see GroupNames.txt")
+        with open("GroupNames.txt", "r") as group_names:
+            labels = group_names.read().split("\n")
+        label_string = ""
+        num_labels_per_line = 13
+        for index in range((len(labels)//num_labels_per_line)+1):
+            label_string += "  ".join(labels[index*num_labels_per_line:(index+1)*num_labels_per_line]) + "\n"
+
+        self.labelHint = tkinter.Label(self, text="Add group names to GroupNames.txt   \n" + label_string)
         self.labelHint.pack()
-        self.labelHint.place(x=10, y=800)
+        self.labelHint.place(x=230, y=780)
 
         self.entryMessage = tkinter.Text(width=75, height=2)
         self.entryMessage.place(x=10, y=870)
 
         self.button = tkinter.Button(self, text=u"Save", command=self.on_button_save_click)
-        self.button.place(x=300, y=830)
+        self.button.place(x=150, y=830)
 
         self.button_open = tkinter.Button(self, text=u"Open recent", command=self.on_button_open_click)
-        self.button_open.place(x=100, y=830)
+        self.button_open.place(x=20, y=830)
 
     def on_button_open_click(self):
         file_path_string = filedialog.askopenfilename(initialdir=self.output_dir,

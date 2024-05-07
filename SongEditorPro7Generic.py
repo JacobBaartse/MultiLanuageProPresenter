@@ -147,11 +147,3 @@ def save_song(text_block_names, song_texts, line_count, output_filename):
 
     with open(output_filename + ".pro", "wb") as pro_file:
         pro_file.write(presentation_obj.SerializeToString())
-
-
-if __name__ == "__main__":
-    current_verses = [{'text': 'Test song l1 verse 1 engels.\n Song trail l1 verse 1 vertaling.', 'label': 'Verse 1'}, {'text': 'Test song l2 verse 1 engels.\n Song trail l2 verse 1 vertaling.', 'label': 'Verse 1'}, {'text': 'Test song l1 verse 2 engels,\n Song trail l1 verse 2 vertaling,\nTest song l2 verse 2 engels.\n Song trail l2 verse 2 vertaling.', 'label': 'Verse 2'}]
-    output_filename = r"C:\Users\fam_b\Downloads\test_1.pro"
-
-    save_song(current_verses, output_filename)
-
