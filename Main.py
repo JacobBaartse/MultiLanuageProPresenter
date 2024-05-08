@@ -125,7 +125,7 @@ class simpleapp_tk(tkinter.Tk):
 
             self.entryMessage.delete('1.0', tkinter.END)
             self.entryMessage.insert(tkinter.END, 'import in Pro presenter: "file", "import", "import file", ' + output_filename)
-        except NameError as ne:
+        except Exception as ne:
             self.entryMessage.delete('1.0', tkinter.END)
             self.entryMessage.insert(tkinter.END, "ERROR" + str(ne))
 
