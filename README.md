@@ -1,4 +1,4 @@
-# MultiLanuageProPresenter
+# MultiLanguage ProPresenter
 python script to generate a file that can be imported in propresenter 7 with multiple languages or tranlation(s)
 
 introduction video: 
