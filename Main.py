@@ -2,6 +2,7 @@
 
 import tkinter as tkinter
 import tkinter.filedialog as filedialog
+from tkinter.font import Font, nametofont
 import os
 from SongEditorPro7Generic import save_song, get_text_block_names
 import pickle
@@ -137,6 +138,8 @@ if __name__ == "__main__":
     output_dir = get_download_path()
 
     app = simpleapp_tk(None, output_dir=output_dir, text_block_names=text_block_names)
+    default_font = nametofont("TkDefaultFont")
+    default_font.configure(size=8)
 
     gui_with = 540*num_languages
     app.geometry(str(gui_with) + "x930+0+0")
