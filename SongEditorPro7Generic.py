@@ -35,6 +35,7 @@ def add_slide(presentation_obj, cue_group_names, slide_label):
 
 def encode_for_rtf(some_string):
     some_string = some_string.replace("\\", "\\\\")
+    some_string = some_string.replace("\r", "")
     some_string = some_string.replace("{", "\\u123?")
     some_string = some_string.replace("}", "\\u125?")
     return some_string
@@ -85,11 +86,7 @@ def split_slides(text_block_names, song_texts, max_line_count):
         line_index += 1
 
 
-def save_song(text_block_names, song_texts, line_count, output_filename):
-    #  store also as pickle file.
-    with open(output_filename + '.pkl', 'wb+') as f:
-        pickle.dump(song_texts, f)
-
+def gen_pro_data(text_block_names, song_texts, line_count):
     intro_uuid = make_uuid()
     cue_group_names = {"Intro": 0,
                        }
@@ -144,6 +141,17 @@ def save_song(text_block_names, song_texts, line_count, output_filename):
 
     add_slide(presentation_obj, cue_group_names, slide_label="Interlude")
     add_slide(presentation_obj, cue_group_names, slide_label="Ending")
+    return presentation_obj.SerializeToString()
+
+
+def save_song(text_block_names, song_texts, line_count, output_filename):
+    #  store also as pickle file.
+    with open(output_filename + '.pkl', 'wb+') as f:
+        pickle.dump(song_texts, f)
 
     with open(output_filename + ".pro", "wb") as pro_file:
-        pro_file.write(presentation_obj.SerializeToString())
+        pro_file.write(gen_pro_data(text_block_names, song_texts, line_count))
+
+
+if __name__ == "__main__":
+    print(get_text_block_names())

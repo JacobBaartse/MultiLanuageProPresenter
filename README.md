@@ -46,3 +46,8 @@ ModuleNotFoundError: No module named 'tkinter'
 - sudo apt update -y && sudo apt install -y python3.10-tk
 - sudo apt install python3-pip
 - pip install --upgrade protobuf
+
+
+Deployment as a website:
+- have a website supporting flask
+- entrypoint for flask is flask_gui.py
