@@ -51,3 +51,15 @@ ModuleNotFoundError: No module named 'tkinter'
 Deployment as a website:
 - have a website supporting flask
 - entrypoint for flask is flask_gui.py
+
+howto website example:
+- for more info see also https://help.pythonanywhere.com/pages/Flask/
+- create an account on pythonanywhere.com
+- create a virtual environment
+- in this environment install :
+  - pip install protobuf
+  - pip install flask
+- add a new web app ; select flask
+- make the "Source code"  and  "Working directory"  the same
+- upload all files to this directory
+- select the virtual environment that has been created

@@ -43,7 +43,7 @@ def song_input():
         label_string += "\""
         label_string += "\"&nbsp; &nbsp; \"".join(labels[index*num_labels_per_line:(index+1)*num_labels_per_line]) + "\"</br>"
 
-    html = f"""<html><body>
+    html = f"""<html><body  style="background-color:LightGray;">
         <form action=# method="post">
             <label>Song name:</label>
             <input id="SongName" name="SongName" type="text" required size="100">
