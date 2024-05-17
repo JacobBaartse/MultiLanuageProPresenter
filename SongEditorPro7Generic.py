@@ -62,25 +62,26 @@ def split_slides(text_block_names, song_texts, max_line_count):
     while True:
         to_next_line = False
         for index, text_block_name in enumerate(text_block_names):
-            if line_index >= len(song_texts[text_block_name]):
+            if line_index >= len(song_texts[text_block_names[0]]):
                 return slides
-            if not to_next_line:
-                if (song_texts[text_block_name][line_index].strip() == "") or (lines_in_slide == max_line_count):
-                    if slide:
+            if not to_next_line:  # slide complete
+                if (song_texts[text_block_names[0]][line_index].strip() == "") or (lines_in_slide == max_line_count):
+                    if slide:  # skip empty slides
                         slides.append(slide)
                     slide = {}
                     lines_in_slide = 0
-                if song_texts[text_block_name][line_index].strip() == "":
+                if song_texts[text_block_names[0]][line_index].strip() == "":
                     to_next_line = True
-            if not to_next_line:
-                if song_texts[text_block_name][line_index] in labels:
+            if not to_next_line:  # store any group label
+                if song_texts[text_block_names[0]][line_index] in labels:
                     to_next_line = True
                     slide["label"] = song_texts[text_block_name][line_index]
-            if not to_next_line:
-                if text_block_name in slide:
-                    slide[text_block_name] += "\\par " + encode_for_rtf(song_texts[text_block_name][line_index])
-                else:
-                    slide[text_block_name] = encode_for_rtf(song_texts[text_block_name][line_index])
+            if not to_next_line:  # append lines to slide
+                if len(song_texts[text_block_name]) > line_index:
+                    if text_block_name in slide and slide[text_block_name]:
+                        slide[text_block_name] += "\\par " + encode_for_rtf(song_texts[text_block_name][line_index])
+                    else:
+                        slide[text_block_name] = encode_for_rtf(song_texts[text_block_name][line_index])
                 if index == len(text_block_names) - 1:
                     lines_in_slide += 1
         line_index += 1

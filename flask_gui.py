@@ -12,7 +12,8 @@ def song_download():
     text_block_names = get_text_block_names()
     song_text = {}
     for text_block_name in text_block_names:
-        song_text[text_block_name] = (form_data[text_block_name]+"\n").split("\n")
+        a_song_text = form_data[text_block_name].replace("\r", "")
+        song_text[text_block_name] = (a_song_text+"\n").split("\n")
     line_count = int(form_data["NumLines"])
     song_binary = gen_pro_data(text_block_names, song_text, line_count)
     response = make_response(song_binary)
@@ -65,3 +66,7 @@ def song_input():
     </body></html>"""
     return html
 
+
+# for local testing  should be commented when used while web hosting.
+# if __name__ == '__main__':
+#     app.run(debug=True)
