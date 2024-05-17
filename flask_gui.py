@@ -1,14 +1,10 @@
 from flask import Flask, request, make_response
 from SongEditorPro7Generic import get_text_block_names, gen_pro_data
+
 app = Flask(__name__)
 
 
-@app.route("/")
-def home():
-    return "<html><body>home page</body></html>"
-
-
-@app.route("/gen_pro_file", methods=["POST", ])
+@app.route("/", methods=["POST", ])
 def song_download():
     # https://stackoverflow.com/questions/11017466/flask-to-return-image-stored-in-database
     form_data = request.form
@@ -26,7 +22,7 @@ def song_download():
     return response
 
 
-@app.route("/input_song", methods=["GET", ])
+@app.route("/", methods=["GET", ])
 def song_input():
     # https://www.youtube.com/watch?v=mqhxxeeTbu0&list=PLzMcBGfZo4-n4vJJybUVV3Un_NFS5EOgX&index=1
     title = ""
@@ -48,7 +44,7 @@ def song_input():
         label_string += "\"&nbsp; &nbsp; \"".join(labels[index*num_labels_per_line:(index+1)*num_labels_per_line]) + "\"</br>"
 
     html = f"""<html><body>
-        <form action=gen_pro_file method="post">
+        <form action=# method="post">
             <label>Song name:</label>
             <input id="SongName" name="SongName" type="text" required size="100">
             <br/>
@@ -56,17 +52,16 @@ def song_input():
             <label>Number of lines per slide:</label>
             <input id="NumLines" name="NumLines" type="number" value="2" min="1" max="10" required size="5">
             <br/>
-            <table>  
+            <table>
                 <tr>{title}</tr>
                 <tr>{content}</tr>
             </table>
-            <div>{label_string}</div>
+            <table><tr>
+            <td>Possible Group labels:</td><td> {label_string}</td>
+            </tr></table>
             <br/>
             <button type="submit">Download</button>
         </form>
     </body></html>"""
     return html
 
-
-if __name__ == "__main__":
-    app.run()
