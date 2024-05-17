@@ -99,11 +99,8 @@ def gen_pro_data(text_block_names, song_texts, line_count):
 
     rtf_data_big_font = b'{\\rtf0\\ansi\\ansicpg1252' \
                         b'{\\fonttbl\\f0\\fnil ArialMT;}' \
-                        b'{\\colortbl;\\red255\\green255\\blue255;\\red255\\green255\\blue255;}' \
-                        b'{\\*\\expandedcolortbl;\\csgenericrgb\\c100000\\c100000\\c100000\\c100000;\\csgenericrgb\\c100000\\c100000\\c100000\\c0;}' \
-                        b'{\\*\\listtable}' \
-                        b'{\\*\\listoverridetable}' \
-                        b'\\uc1\\paperw37980\\margl0\\margr0\\margt0\\margb0\\pard\\li0\\fi0\\ri0\\qc\\sb0\\sa0\\sl240\\slmult1\\slleading0\\f0\\b0\\i0\\ul0\\strike0\\fs160\\expnd0\\expndtw0\\cf1\\strokewidth0\\strokec1\\nosupersub\\ulc0\\highlight2\\cb2 '
+                        b'{\\colortbl;\\red255\\green255\\blue255;\\red0\\green0\\blue0;}' \
+                        b'\\uc1\\fs160\\cf1\\cb2 '
 
     # remove text from intro slide
     empty_rtf = r"{\rtf1\ansi}".encode()
