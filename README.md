@@ -63,3 +63,4 @@ howto website example:
 - make the "Source code"  and  "Working directory"  the same
 - upload all files to this directory
 - select the virtual environment that has been created
+- flask_gui.py is the entrypoint for the web gui
