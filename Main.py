@@ -2,10 +2,10 @@
 
 import tkinter as tkinter
 import tkinter.filedialog as filedialog
-from tkinter.font import Font, nametofont
+from tkinter.font import nametofont
 import os
 from SongEditorPro7Generic import save_song, get_text_block_names
-import pickle
+import json
 
 
 def get_download_path():
@@ -89,19 +89,19 @@ class simpleapp_tk(tkinter.Tk):
 
     def on_button_open_click(self):
         file_path_string = filedialog.askopenfilename(initialdir=self.output_dir,
-                                                      filetypes=[("song files", "*.pkl")])
+                                                      filetypes=[("song files", "*.json")])
 
         with open(file_path_string, 'rb') as f:
-            loaded_dict = pickle.load(f)
+            loaded_dict = json.load(f)
 
         for index, text_block_name in enumerate(self.text_block_names):
             self.songEntries[index].delete(1.0, tkinter.END)  # required for linux
 
         for index, text_block_name in enumerate(self.text_block_names):
-            self.songEntries[index].insert(tkinter.END, "\n".join(loaded_dict[text_block_name]))
+            self.songEntries[index].insert(tkinter.END, "\n".join(loaded_dict[text_block_name]).rstrip("\n"))
 
         file_path_string.replace("\\", "/")
-        self.entryTitle.set(file_path_string.replace(".pkl", "").split("/")[-1])
+        self.entryTitle.set(file_path_string.replace(".json", "").split("/")[-1])
 
     def on_button_save_click(self):
         title = self.entryTitle.get()

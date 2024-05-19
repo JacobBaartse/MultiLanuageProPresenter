@@ -1,6 +1,6 @@
 import presentation_pb2
 from uuid import uuid1
-import pickle
+import json
 
 TEMPLATE = 0
 
@@ -142,10 +142,21 @@ def gen_pro_data(text_block_names, song_texts, line_count):
     return presentation_obj.SerializeToString()
 
 
+class MemoryFile(object):
+    def __init__(self):
+        self.data = b""
+
+    def write(self, stuff):
+        self.data += stuff.encode()
+
+
 def save_song(text_block_names, song_texts, line_count, output_filename):
     #  store also as pickle file.
-    with open(output_filename + '.pkl', 'wb+') as f:
-        pickle.dump(song_texts, f)
+    mem_file = MemoryFile()
+    json.dump(song_texts, mem_file)
+
+    with open(output_filename + '.json', 'wb+') as f:
+        f.write(mem_file.data)
 
     with open(output_filename + ".pro", "wb") as pro_file:
         pro_file.write(gen_pro_data(text_block_names, song_texts, line_count))
