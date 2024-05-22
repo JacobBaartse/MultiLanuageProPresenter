@@ -92,7 +92,7 @@ def song_input():
         <head>
             <style>
             input[type=file]{{
-                width:90px;
+                width:110px;
                 color:transparent;
             }}
             </style>
