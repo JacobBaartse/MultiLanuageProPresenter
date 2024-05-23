@@ -97,9 +97,16 @@ def gen_pro_data(text_block_names, song_texts, line_count):
     file1 = open(sample_file, mode='rb')
     presentation_obj.ParseFromString(file1.read())
 
+    colors = [b"\\red255\\green255\\blue255;",
+              b"\\red0\\green255\\blue255;",
+              b"\\red255\\green255\\blue0;",
+              b"\\red255\\green0\\blue255;",
+              b"\\red125\\green125\\blue255;",
+              b"\\red125\\green255\\blue125;",
+              b"\\red255\\green125\\blue125;"]
     rtf_data_big_font = b'{\\rtf0\\ansi\\ansicpg1252' \
                         b'{\\fonttbl\\f0\\fnil ArialMT;}' \
-                        b'{\\colortbl;\\red255\\green255\\blue255;\\red0\\green0\\blue0;}' \
+                        b'{\\colortbl;FONT_COLOR\\red0\\green0\\blue0;}' \
                         b'\\uc1\\fs160\\cf1\\cb2 '
 
     # remove text from intro slide
@@ -128,11 +135,11 @@ def gen_pro_data(text_block_names, song_texts, line_count):
         presentation_obj.cues.add()
         presentation_obj.cues[-1].CopyFrom(presentation_obj.cues[TEMPLATE])
         presentation_obj.cues[-1].uuid.string = slide_uuid
-        for element in presentation_obj.cues[-1].actions[0].slide.presentation.base_slide.elements:
+        for index, element in enumerate(presentation_obj.cues[-1].actions[0].slide.presentation.base_slide.elements):
             text_block_name = element.element.name
             if text_block_name in slide_text:
                 element.element.uuid.string = make_uuid()
-                element.element.text.rtf_data = rtf_data_big_font + slide_text[text_block_name].encode() + b"}"
+                element.element.text.rtf_data = rtf_data_big_font.replace(b"FONT_COLOR", colors[index]) + slide_text[text_block_name].encode() + b"}"
             else:
                 element.element.uuid.string = make_uuid()
                 element.element.text.rtf_data = empty_rtf
