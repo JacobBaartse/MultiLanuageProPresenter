@@ -73,9 +73,9 @@ def song_input():
     for name in text_block_names:
         if name in loaded_dict:
             song_text = "\n".join(loaded_dict[name]).rstrip("\n")
-            content += f"""<td><textarea id ="{name}" name="{name}" rows="50" cols="50">{song_text}</textarea></td>"""
+            content += f"""<td"><textarea  style="white-space:pre; id ="{name}" name="{name}" rows="50" cols="50">{song_text}</textarea></td>"""
         else:
-            content += f"""<td><textarea id ="{name}" name="{name}" rows="50" cols="50"></textarea></td>"""
+            content += f"""<td><textarea  style="white-space:pre; id ="{name}" name="{name}" rows="50" cols="50"></textarea></td>"""
 
     with open("GroupNames.txt", "r") as group_names:
         labels = group_names.read().split("\n")
@@ -106,7 +106,7 @@ def song_input():
             <label>Number of lines per slide:</label>
             <input id="NumLines" name="NumLines" type="number" value="2" min="1" max="10" required size="5">
             <br/>
-            <table>
+            <table style='font-family:"Courier New"'>
                 <tr>{title}</tr>
                 <tr>{content}</tr>
             </table>
