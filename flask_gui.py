@@ -73,9 +73,9 @@ def song_input():
     for name in text_block_names:
         if name in loaded_dict:
             song_text = "\n".join(loaded_dict[name]).rstrip("\n")
-            content += f"""<td"><textarea  style="white-space:pre; id ="{name}" name="{name}" rows="50" cols="50">{song_text}</textarea></td>"""
+            content += f"""<td><textarea  style="white-space:pre;" id ="{name}" name="{name}" rows="50" cols="50">{song_text}</textarea></td>\n"""
         else:
-            content += f"""<td><textarea  style="white-space:pre; id ="{name}" name="{name}" rows="50" cols="50"></textarea></td>"""
+            content += f"""<td><textarea  style="white-space:pre;" id ="{name}" name="{name}" rows="50" cols="50"></textarea></td>\n"""
 
     with open("GroupNames.txt", "r") as group_names:
         labels = group_names.read().split("\n")
@@ -83,12 +83,12 @@ def song_input():
     num_labels_per_line = 13
     for index in range((len(labels)//num_labels_per_line)+1):
         label_string += "\""
-        label_string += "\"&nbsp; &nbsp; \"".join(labels[index*num_labels_per_line:(index+1)*num_labels_per_line]) + "\"</br>"
+        label_string += "\"&nbsp; &nbsp; \"".join(labels[index*num_labels_per_line:(index+1)*num_labels_per_line]) + "\"<br/>\n"
     song_title = ""
     if "song_title" in loaded_dict:
         song_title = loaded_dict["song_title"]
 
-    html = f"""<html>
+    html = f"""<!DOCTYPE html>
         <head>
             <style>
             input[type=file]{{
@@ -125,5 +125,5 @@ def song_input():
 
 
 # for local testing  should be commented when used while web hosting.
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
