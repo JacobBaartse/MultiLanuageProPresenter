@@ -73,9 +73,9 @@ def song_input():
     for name in text_block_names:
         if name in loaded_dict:
             song_text = "\n".join(loaded_dict[name]).rstrip("\n")
-            content += f"""<td><textarea  style="white-space:pre;" id ="{name}" name="{name}" rows="50" cols="50">{song_text}</textarea></td>\n"""
+            content += f"""<td><textarea  style="white-space:pre;" id ="{name}" name="{name}" rows="50" cols="50" class="linked" >{song_text}</textarea></td>\n"""
         else:
-            content += f"""<td><textarea  style="white-space:pre;" id ="{name}" name="{name}" rows="50" cols="50"></textarea></td>\n"""
+            content += f"""<td><textarea  style="white-space:pre;" id ="{name}" name="{name}" rows="50" cols="50" class="linked" ></textarea></td>\n"""
 
     with open("GroupNames.txt", "r") as group_names:
         labels = group_names.read().split("\n")
@@ -88,8 +88,18 @@ def song_input():
     if "song_title" in loaded_dict:
         song_title = loaded_dict["song_title"]
 
+    jquiry_scripts = """        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
+     <script>
+    $(function(){
+    $('.linked').scroll(function(){
+        $('.linked').scrollTop($(this).scrollTop());
+    })
+
+})
+</script>"""
     html = f"""<!DOCTYPE html>
         <head>
+            {jquiry_scripts}
             <style>
             input[type=file]{{
                 width:110px;
