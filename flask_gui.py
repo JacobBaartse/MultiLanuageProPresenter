@@ -97,15 +97,22 @@ def song_input():
 
 })
 </script>"""
+    style = """            <style>
+            input[type=file]{
+                width:110px;
+                color:transparent;
+            }
+            textarea {
+            font-family: 'Courier New', monospace;
+            }
+            html * {
+               font-family: 'Sonus', 'Arial';
+            }
+            </style>"""
     html = f"""<!DOCTYPE html>
         <head>
             {jquiry_scripts}
-            <style>
-            input[type=file]{{
-                width:110px;
-                color:transparent;
-            }}
-            </style>
+            {style}
         </head>
         <body  style="background-color:LightGray;">
         <form action=# method="post"  enctype="multipart/form-data">
