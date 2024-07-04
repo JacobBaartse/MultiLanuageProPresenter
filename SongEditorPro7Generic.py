@@ -87,6 +87,16 @@ def split_slides(text_block_names, song_texts, max_line_count):
         line_index += 1
 
 
+def convert_to_rtf_unicodes(line):
+    return_value = ""
+    for a_char in line:
+        if ord(a_char) > 255:
+            return_value += f"\\u{str(ord(a_char))} ?"
+        else:
+            return_value += a_char
+    return return_value
+
+
 def gen_pro_data(text_block_names, song_texts, line_count):
     intro_uuid = make_uuid()
     cue_group_names = {"Intro": 0,
@@ -139,7 +149,9 @@ def gen_pro_data(text_block_names, song_texts, line_count):
             text_block_name = element.element.name
             if text_block_name in slide_text:
                 element.element.uuid.string = make_uuid()
-                element.element.text.rtf_data = rtf_data_big_font.replace(b"FONT_COLOR", colors[index]) + slide_text[text_block_name].encode() + b"}"
+                element.element.text.rtf_data = rtf_data_big_font.replace(b"FONT_COLOR", colors[index]) + \
+                                                convert_to_rtf_unicodes(slide_text[text_block_name]).encode() \
+                                                + b"}"
             else:
                 element.element.uuid.string = make_uuid()
                 element.element.text.rtf_data = empty_rtf
