@@ -29,8 +29,10 @@ def add_slide(presentation_obj, cue_group_names, slide_label):
     presentation_obj.cues.add()
     presentation_obj.cues[-1].CopyFrom(presentation_obj.cues[TEMPLATE])
     presentation_obj.cues[-1].uuid.string = slide_uuid
-    presentation_obj.cues[-1].actions[0].slide.presentation.base_slide.elements[0].element.uuid.string = make_uuid()
-    presentation_obj.cues[-1].actions[0].slide.presentation.base_slide.elements[1].element.uuid.string = make_uuid()
+    for element in presentation_obj.cues[-1].actions[0].slide.presentation.base_slide.elements:
+        element.element.uuid.string = make_uuid()
+    presentation_obj.cues[-1].actions[0].uuid.string = make_uuid()
+    presentation_obj.cues[-1].actions[0].slide.presentation.base_slide.uuid.string = make_uuid()
 
 
 def encode_for_rtf(some_string):
@@ -90,10 +92,13 @@ def split_slides(text_block_names, song_texts, max_line_count):
 def convert_to_rtf_unicodes(line):
     return_value = ""
     for a_char in line:
-        if ord(a_char) > 255:
-            return_value += f"\\u{str(ord(a_char))} ?"
-        else:
+        char_val = ord(a_char)
+        if char_val < 127:
             return_value += a_char
+        elif char_val <= 32767:
+            return_value += f"\\u{str(char_val)} ?"
+        else:
+            return_value += f"\\u{str(char_val-65536)} ?"
     return return_value
 
 
@@ -106,6 +111,10 @@ def gen_pro_data(text_block_names, song_texts, line_count):
     presentation_obj = presentation_pb2.Presentation()
     file1 = open(sample_file, mode='rb')
     presentation_obj.ParseFromString(file1.read())
+    presentation_uuid = make_uuid()
+    presentation_obj.uuid.string = presentation_uuid
+
+
 
     colors = [b"\\red255\\green255\\blue255;",
               b"\\red0\\green255\\blue255;",
@@ -121,13 +130,21 @@ def gen_pro_data(text_block_names, song_texts, line_count):
 
     # remove text from intro slide
     empty_rtf = r"{\rtf1\ansi}".encode()
-    presentation_obj.cues[0].actions[0].slide.presentation.base_slide.elements[0].element.text.rtf_data = empty_rtf
-    presentation_obj.cues[0].actions[0].slide.presentation.base_slide.elements[1].element.text.rtf_data = empty_rtf
+    for element in presentation_obj.cues[0].actions[0].slide.presentation.base_slide.elements:
+        element.element.text.rtf_data = empty_rtf
+        element.element.uuid.string = make_uuid()
+
     # update reference to intro slide
     presentation_obj.cue_groups[0].group.name = "Intro"
+    presentation_obj.cue_groups[0].group.uuid.string = make_uuid()
+    intro_uuid = make_uuid()
     presentation_obj.cue_groups[0].cue_identifiers[0].string = intro_uuid
     presentation_obj.cues[0].uuid.string = intro_uuid
     presentation_obj.cue_groups[-1].group.application_group_identifier.string = make_uuid()
+    presentation_obj.cue_groups[-1].group.application_group_name = "Intro"
+
+    presentation_obj.cues[0].actions[0].uuid.string = make_uuid()
+    presentation_obj.cues[0].actions[0].slide.presentation.base_slide.uuid.string = make_uuid()
 
     slide_label = None
     song_texts = split_slides(text_block_names, song_texts, line_count)
@@ -145,6 +162,9 @@ def gen_pro_data(text_block_names, song_texts, line_count):
         presentation_obj.cues.add()
         presentation_obj.cues[-1].CopyFrom(presentation_obj.cues[TEMPLATE])
         presentation_obj.cues[-1].uuid.string = slide_uuid
+        presentation_obj.cues[-1].actions[0].uuid.string = make_uuid()
+        presentation_obj.cues[-1].actions[0].slide.presentation.base_slide.uuid.string = make_uuid()
+
         for index, element in enumerate(presentation_obj.cues[-1].actions[0].slide.presentation.base_slide.elements):
             text_block_name = element.element.name
             if text_block_name in slide_text:
