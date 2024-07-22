@@ -104,6 +104,7 @@ def song_input():
             }
             textarea {
             font-family: 'Courier New', monospace;
+            resize: none;
             }
             html * {
                font-family: 'Sonus', 'Arial';
@@ -142,5 +143,5 @@ def song_input():
 
 
 # for local testing  should be commented when used while web hosting.
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)

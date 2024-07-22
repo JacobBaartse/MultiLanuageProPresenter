@@ -10,10 +10,9 @@ def make_uuid():
     return tmp
 
 
-def add_que_group(presentation_obj, cue_group_names, slide_label, slide_uuid):
+def add_que_group(presentation_obj, slide_label, slide_uuid):
     presentation_obj.cue_groups.add()
     cue_group_id = len(presentation_obj.cue_groups) - 1
-    cue_group_names[slide_label] = cue_group_id
     presentation_obj.cue_groups[cue_group_id].CopyFrom(presentation_obj.cue_groups[TEMPLATE])
     presentation_obj.cue_groups[cue_group_id].group.uuid.string = make_uuid()
     presentation_obj.cue_groups[cue_group_id].group.name = slide_label
@@ -23,9 +22,9 @@ def add_que_group(presentation_obj, cue_group_names, slide_label, slide_uuid):
     presentation_obj.cue_groups[cue_group_id].cue_identifiers[-1].string = slide_uuid
 
 
-def add_slide(presentation_obj, cue_group_names, slide_label):
+def add_slide(presentation_obj, slide_label):
     slide_uuid = make_uuid()
-    add_que_group(presentation_obj, cue_group_names, slide_label, slide_uuid)
+    add_que_group(presentation_obj, slide_label, slide_uuid)
     presentation_obj.cues.add()
     presentation_obj.cues[-1].CopyFrom(presentation_obj.cues[TEMPLATE])
     presentation_obj.cues[-1].uuid.string = slide_uuid
@@ -59,6 +58,20 @@ def split_slides(text_block_names, song_texts, max_line_count):
     slide = {"label": "Verse 1"}
     with open("GroupNames.txt", "r") as group_names:
         labels = group_names.read().split("\n")
+
+    tmp_labels = []
+    for a_label in labels:
+        if ".." in a_label:
+            label_name = a_label.split(" ")[0]
+            start_nr, end_nr = a_label.split(" ")[1].split("..")
+            start_nr = int(start_nr)
+            end_nr = int(end_nr)
+            for i in range(start_nr, end_nr+1):
+                tmp_labels.append(label_name + " " + str(i))
+        else:
+            tmp_labels.append(a_label)
+    labels = tmp_labels
+
     line_index = 0
     lines_in_slide = 0
     while True:
@@ -103,9 +116,6 @@ def convert_to_rtf_unicodes(line):
 
 
 def gen_pro_data(text_block_names, song_texts, line_count):
-    intro_uuid = make_uuid()
-    cue_group_names = {"Intro": 0,
-                       }
 
     sample_file = r"Template.pro"
     presentation_obj = presentation_pb2.Presentation()
@@ -148,16 +158,17 @@ def gen_pro_data(text_block_names, song_texts, line_count):
 
     slide_label = None
     song_texts = split_slides(text_block_names, song_texts, line_count)
+    prev_slide_label = "no label selected yet"
     for slide_text in song_texts:
         slide_uuid = make_uuid()
         if "label" in slide_text:
             slide_label = slide_text["label"]
-        if slide_label in cue_group_names:
-            cue_group_id = cue_group_names[slide_label]
+        if slide_label == prev_slide_label:
+            cue_group_id = -1
             presentation_obj.cue_groups[cue_group_id].cue_identifiers.add()
             presentation_obj.cue_groups[cue_group_id].cue_identifiers[-1].string = slide_uuid
         else:
-            add_que_group(presentation_obj, cue_group_names, slide_label, slide_uuid)
+            add_que_group(presentation_obj, slide_label, slide_uuid)
 
         presentation_obj.cues.add()
         presentation_obj.cues[-1].CopyFrom(presentation_obj.cues[TEMPLATE])
@@ -176,8 +187,8 @@ def gen_pro_data(text_block_names, song_texts, line_count):
                 element.element.uuid.string = make_uuid()
                 element.element.text.rtf_data = empty_rtf
 
-    add_slide(presentation_obj, cue_group_names, slide_label="Interlude")
-    add_slide(presentation_obj, cue_group_names, slide_label="Ending")
+    add_slide(presentation_obj, slide_label="Interlude")
+    add_slide(presentation_obj, slide_label="Ending")
     return presentation_obj.SerializeToString()
 
 
