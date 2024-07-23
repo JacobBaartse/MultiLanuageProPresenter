@@ -13,6 +13,25 @@ class MemoryFile(object):
         self.data += stuff.encode()
 
 
+def strip_song_name(song_name):
+    s = r"ÇüéâäàåçêëèïîìÄÅÉôöòûùÿÖÜøØ×ƒáíóúñÑÁÂÀ¥ãÃÐÊËÈıÍÎÏÌÓßÔÒõÕµÚÛÙýÝ§¹³²"
+    r = r"CueaaaaceeeiiiAAEooouuyOU00xfaiounNAAAYaADEEE1IIIIOSOOoOuUUUyYS132"
+
+    converted = ""
+    for character in song_name:
+        for _s, _r in zip(s, r):
+            if character == _s:
+                character = _r
+        if character not in ("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz-_ "):
+            character = " "
+        converted += character
+    # remove multiple spaces
+    while "  " in converted:
+        converted = converted.replace("  ", " ")
+    song_name = converted.strip()
+    return song_name
+
+
 def json_download(request):
     form_data = request.form
     text_block_names = get_text_block_names()
@@ -24,7 +43,8 @@ def json_download(request):
     json.dump(song_text, mem_file)
     response = make_response(mem_file.data)
     response.headers.set('Content-Type', 'binary/json')
-    response.headers.set('Content-Disposition', 'attachment', filename=f'{form_data["SongName"]}.json')
+    song_file_name = strip_song_name(form_data["SongName"])
+    response.headers.set('Content-Disposition', 'attachment', filename=f'{song_file_name}.json')
     return response
 
 
@@ -41,7 +61,8 @@ def song_download(request):
     song_binary = gen_pro_data(text_block_names, song_text, line_count)
     response = make_response(song_binary)
     response.headers.set('Content-Type', 'binary/pro')
-    response.headers.set('Content-Disposition', 'attachment', filename=f'{form_data["SongName"]}.pro')
+    song_file_name = strip_song_name(form_data["SongName"])
+    response.headers.set('Content-Disposition', 'attachment', filename=f'{song_file_name}.pro')
     return response
 
 
@@ -143,5 +164,5 @@ def song_input():
 
 
 # for local testing  should be commented when used while web hosting.
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
